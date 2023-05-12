@@ -1,0 +1,82 @@
+using System;
+
+class Pessoa
+{
+    public string Nome { get; set; }
+    public int Idade { get; set; }
+}
+
+class Suite
+{
+    public int Numero { get; set; }
+    public decimal ValorDiaria { get; set; }
+    public int CapacidadeMaxima { get; set; }
+}
+
+class Reserva
+{
+    public Pessoa Hospede { get; set; }
+    public Suite Suite { get; set; }
+    public DateTime DataInicio { get; set; }
+    public DateTime DataFim { get; set; }
+
+    public int QuantidadeHospedes
+    {
+        get { return CalcularQuantidadeHospedes(); }
+    }
+
+    public decimal ValorTotal
+    {
+        get { return CalcularValorTotal(); }
+    }
+
+    private int CalcularQuantidadeHospedes()
+    {
+        // Aqui você pode implementar a lógica para calcular a quantidade de hóspedes,
+        // seja com base em propriedades da classe Pessoa ou de alguma outra forma.
+
+        // Exemplo: retornando sempre 1 hóspede por reserva.
+        return 1;
+    }
+
+    private decimal CalcularValorTotal()
+    {
+        int totalDias = (int)(DataFim - DataInicio).TotalDays;
+        decimal valorTotal = totalDias * Suite.ValorDiaria;
+
+        if (totalDias > 10)
+        {
+            valorTotal *= 0.9m; // Aplica desconto de 10% para reservas acima de 10 dias.
+        }
+
+        return valorTotal;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Pessoa hospede = new Pessoa { Nome = "João", Idade = 30 };
+        Suite suite = new Suite { Numero = 1, ValorDiaria = 100, CapacidadeMaxima = 2 };
+        DateTime dataInicio = DateTime.Now;
+        DateTime dataFim = dataInicio.AddDays(7);
+
+        Reserva reserva = new Reserva
+        {
+            Hospede = hospede,
+            Suite = suite,
+            DataInicio = dataInicio,
+            DataFim = dataFim
+        };
+
+        Console.WriteLine("Reserva:");
+        Console.WriteLine($"Hóspede: {reserva.Hospede.Nome}");
+        Console.WriteLine($"Suite: {reserva.Suite.Numero}");
+        Console.WriteLine($"Data de início: {reserva.DataInicio.ToShortDateString()}");
+        Console.WriteLine($"Data de fim: {reserva.DataFim.ToShortDateString()}");
+        Console.WriteLine($"Quantidade de hóspedes: {reserva.QuantidadeHospedes}");
+        Console.WriteLine($"Valor total: R${reserva.ValorTotal}");
+
+        // Aguarde a entrada do usuário antes de fechar a janela do console.
+        Console.ReadLine();
